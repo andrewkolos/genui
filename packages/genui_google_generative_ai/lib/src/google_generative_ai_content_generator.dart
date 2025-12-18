@@ -37,6 +37,7 @@ class GoogleGenerativeAiContentGenerator implements ContentGenerator {
     this.additionalTools = const [],
     this.modelName = 'models/gemini-2.5-flash',
     this.apiKey,
+    this.generationConfig,
   });
 
   /// The catalog of UI components available to the AI.
@@ -75,6 +76,9 @@ class GoogleGenerativeAiContentGenerator implements ContentGenerator {
   /// The API key to use for authentication.
   final String? apiKey;
 
+  /// Configuration for the generation (e.g., temperature, max tokens).
+  final google_ai.GenerationConfig? generationConfig;
+
   /// The total number of input tokens used by this client.
   int inputTokenUsage = 0;
 
@@ -98,8 +102,12 @@ class GoogleGenerativeAiContentGenerator implements ContentGenerator {
   @override
   ValueListenable<bool> get isProcessing => _isProcessing;
 
+  bool _isDisposed = false;
+
   @override
   void dispose() {
+    genUiLogger.info('GoogleGenerativeAiContentGenerator disposed');
+    _isDisposed = true;
     _a2uiMessageController.close();
     _textResponseController.close();
     _errorController.close();
@@ -112,6 +120,10 @@ class GoogleGenerativeAiContentGenerator implements ContentGenerator {
     Iterable<ChatMessage>? history,
     A2UiClientCapabilities? clientCapabilities,
   }) async {
+    if (_isDisposed) {
+      genUiLogger.warning('Attempted to sendRequest on disposed generator');
+      return;
+    }
     _isProcessing.value = true;
     try {
       final messages = [...?history, message];
@@ -121,14 +133,24 @@ class GoogleGenerativeAiContentGenerator implements ContentGenerator {
         outputSchema: dsb.S.object(properties: {'response': dsb.S.string()}),
       );
       // Convert any response to a text response to the user.
-      if (response is Map && response.containsKey('response')) {
+      if (!_isDisposed && response is Map && response.containsKey('response')) {
         _textResponseController.add(response['response']! as String);
+      } else if (_isDisposed) {
+        genUiLogger.warning(
+          'Generator disposed before response could be processed',
+        );
       }
     } catch (e, st) {
-      genUiLogger.severe('Error generating content', e, st);
-      _errorController.add(ContentGeneratorError(e, st));
+      if (!_isDisposed) {
+        genUiLogger.severe('Error generating content', e, st);
+        _errorController.add(ContentGeneratorError(e, st));
+      } else {
+        genUiLogger.warning('Error while disposed (ignored): $e');
+      }
     } finally {
-      _isProcessing.value = false;
+      if (!_isDisposed) {
+        _isProcessing.value = false;
+      }
     }
   }
 
@@ -416,6 +438,7 @@ With functions:
                       mode: google_ai.FunctionCallingConfig_Mode.auto,
                     ),
                   ),
+            generationConfig: generationConfig,
           );
           response = await service.generateContent(request);
           genUiLogger.finest(
