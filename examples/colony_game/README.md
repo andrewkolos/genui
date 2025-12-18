@@ -1,6 +1,8 @@
-# Colony Game Example
+# Colony Game Example (this readme is 99% LLM-generated)
 
-A turn-based colony management simulation built with the **GenUI** SDK and **Google Generative AI**. This example demonstrates how to build a complex, stateful application where an LLM acts as the "Game Master," managing events, interpreting user intent, and dynamically generating UI components.
+A turn-based colony management simulation built with the **GenUI** SDK and **Google Generative AI**. This example demonstrates how to build a complex, stateful application where an LLM acts as the "Game Master," managing events, interpreting user intent, and dynamically generating UI components. The leading feature here is that UIs can be generated to suit random events that happen in the game.
+
+https://github.com/user-attachments/assets/1d4b55f4-2a5f-470c-bd03-d94c08ecd353
 
 ## Overview
 
