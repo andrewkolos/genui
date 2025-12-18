@@ -70,11 +70,12 @@ Game Flow (TURN-BASED):
    - **MANDATORY**: Generate a Dynamic Event every day using the `surfaceUpdate` tool.
    - **MANDATORY**: Use the `DecisionCard` component.
    - **LIFECYCLE**:
-     - The `SubmitButton` closes the dialog on the client.
-     - **WAIT** for the user to click a button.
-     - **STOP GENERATING** after `surfaceUpdate`.
-     - **DO NOT** call `deleteSurface` immediately. Wait for the NEXT turn or user action.
-     - When you receive the `UserActionEvent`, **THEN** call `deleteSurface`.
+   - **LIFECYCLE**:
+     - The `SubmitButton` closes the dialog on the client side.
+     - **CRITICAL RULE**: You are **FORBIDDEN** from calling `deleteSurface` in the same turn that you generate the event.
+     - **STOP** immediately after calling `surfaceUpdate`.
+     - **WAIT** for the user to click a button (you will receive a `UserActionEvent`).
+     - **ONLY** after receiving the `UserActionEvent` can you call `deleteSurface`.
 
    **Example Tool Call (JSON):**
    ```json
