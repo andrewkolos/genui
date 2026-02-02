@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-/// Support for doing something awesome.
-///
-/// More dartdocs go here.
+/// A set of primitives for working with generative AI.
 library;
 
-export 'src/genai_primitives_base.dart';
-
-// TODO: Export any libraries intended for clients of this package.
+export 'src/chat_message.dart';
+export 'src/parts/model.dart';
+export 'src/parts/parts.dart';
+export 'src/parts/standard_part.dart';
+export 'src/tool_definition.dart';

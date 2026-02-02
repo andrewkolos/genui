@@ -2,9 +2,38 @@
 
 This Dart-based command-line tool automates the package publishing process for this monorepo using a safe, two-stage workflow.
 
-## Two-Stage Publish Workflow
+## Prerequisites
 
-The process is split into two distinct commands, `bump` and `publish`, to separate release preparation from the act of publishing.
+#### Permissions to publish a package to pub.dev
+
+Make sure you have 'admin' permissions for the [labs.flutter.dev publisher](https://pub.dev/publishers/labs.flutter.dev), which you can verify on the [admin page](https://pub.dev/publishers/labs.flutter.dev/admin).
+
+If you do not have permissions, ask an existing admin from the linked page to add you.
+
+## How to release GenUI SDK
+
+The process is a two-stage publish workflow. It is split into two distinct commands, `bump` and `publish`,
+to separate release preparation from the act of publishing.
+
+### 0. Update Dependencies
+
+Before running `bump`, make sure to update dependencies to the latest stable versions. This can be done by running:
+
+```bash
+dart pub upgrade --major-versions
+```
+
+Also, use Antigravity or Gemini CLI to update `CHANGELOG.md` files. You can use a prompt like:
+
+```txt
+Look at the git diffs since the <previous tag> tag and add any missing changelog entries to each of the packages with CHANGELOG.md files for breaking and other changes.
+```
+
+Where `<previous tag>` is the tag of the previous release. For example, if the previous release was `genui-0.6.0`, then the command would be:
+
+```txt
+Look at the git diffs since the genui-0.6.0 tag and add any missing changelog entries to each of the packages with CHANGELOG.md files for breaking and other changes.
+```
 
 ### 1. Prepare for Publish with `bump`
 

@@ -1,5 +1,9 @@
 # `genui_firebase_ai` Changelog
 
+## 0.6.2 (in progress)
+
+## 0.6.1
+
 ## 0.6.0
 
 - **BREAKING**: Removed `GenUiConfiguration`.
