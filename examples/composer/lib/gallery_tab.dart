@@ -185,21 +185,32 @@ class _GalleryTabState extends State<GalleryTab>
                   crossAxisCount = 3;
                 }
 
-                return GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: crossAxisCount,
-                    childAspectRatio: 1.6,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
+                return SingleChildScrollView(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      for (int col = 0; col < crossAxisCount; col++) ...[
+                        if (col > 0) const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              for (int i = col;
+                                  i < _samples.length;
+                                  i += crossAxisCount) ...[
+                                if (i >= crossAxisCount)
+                                  const SizedBox(height: 12),
+                                _GalleryCard(
+                                  meta: _samples[i],
+                                  onTap: () => _openSampleDetail(_samples[i]),
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
-                  itemCount: _samples.length,
-                  itemBuilder: (context, index) {
-                    final meta = _samples[index];
-                    return _GalleryCard(
-                      meta: meta,
-                      onTap: () => _openSampleDetail(meta),
-                    );
-                  },
                 );
               },
             ),
@@ -291,33 +302,29 @@ class _GalleryCardState extends State<_GalleryCard>
       child: InkWell(
         onTap: widget.onTap,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Surface preview area
-            Expanded(
-              child: ClipRect(
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: _buildPreview(theme),
-                ),
-              ),
-            ),
-            // Name bar at bottom
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                border: Border(top: BorderSide(color: theme.dividerColor)),
-              ),
+            // Small name label at top
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 8, 10, 4),
               child: Tooltip(
                 message: widget.meta.description,
                 child: Text(
                   widget.meta.name,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w600,
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
+              ),
+            ),
+            // Surface preview area
+            ClipRect(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                child: _buildPreview(theme),
               ),
             ),
           ],
@@ -328,24 +335,30 @@ class _GalleryCardState extends State<_GalleryCard>
 
   Widget _buildPreview(ThemeData theme) {
     if (_isLoading) {
-      return Center(
-        child: SizedBox(
-          width: 20,
-          height: 20,
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            color: theme.colorScheme.onSurfaceVariant.withAlpha(100),
+      return SizedBox(
+        height: 100,
+        child: Center(
+          child: SizedBox(
+            width: 20,
+            height: 20,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: theme.colorScheme.onSurfaceVariant.withAlpha(100),
+            ),
           ),
         ),
       );
     }
 
     if (_hasError || _surfaceIds.isEmpty || _controller == null) {
-      return Center(
-        child: Icon(
-          Icons.widgets_outlined,
-          size: 32,
-          color: theme.colorScheme.onSurfaceVariant.withAlpha(60),
+      return SizedBox(
+        height: 100,
+        child: Center(
+          child: Icon(
+            Icons.widgets_outlined,
+            size: 32,
+            color: theme.colorScheme.onSurfaceVariant.withAlpha(60),
+          ),
         ),
       );
     }
@@ -356,21 +369,17 @@ class _GalleryCardState extends State<_GalleryCard>
     return RepaintBoundary(
       child: IgnorePointer(
         child: FittedBox(
-          fit: BoxFit.contain,
+          fit: BoxFit.fitWidth,
           alignment: Alignment.topCenter,
-          child: SizedBox(
-            width: 375, // Virtual mobile width
-            height: 667, // Virtual mobile height
-            child: OverflowBox(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
               minWidth: 375,
               maxWidth: 375,
-              minHeight: 667,
-              maxHeight: double.infinity, // Allow vertical expansion for layout
-              alignment: Alignment.topCenter,
-              child: Surface(
-                key: ValueKey(surfaceId),
-                surfaceContext: surfaceContext,
-              ),
+              maxHeight: 800,
+            ),
+            child: Surface(
+              key: ValueKey(surfaceId),
+              surfaceContext: surfaceContext,
             ),
           ),
         ),

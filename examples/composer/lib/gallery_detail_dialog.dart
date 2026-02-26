@@ -33,6 +33,8 @@ class GalleryDetailDialog extends StatefulWidget {
 
 class _GalleryDetailDialogState extends State<GalleryDetailDialog> {
   late final CodeController _codeController;
+  late final CodeController _dataController;
+  ValueNotifier<Object?>? _dataModelNotifier;
 
   @override
   void initState() {
@@ -42,11 +44,43 @@ class _GalleryDetailDialogState extends State<GalleryDetailDialog> {
       language: json_lang.json,
       readOnly: true,
     );
+    _dataController = CodeController(
+      text: _getDataModelJson(),
+      language: json_lang.json,
+      readOnly: true,
+    );
+    _subscribeToDataModel();
+  }
+
+  String _getDataModelJson() {
+    if (widget.surfaceIds.isEmpty) return '{}';
+    final dataModel = widget.controller.store.getDataModel(
+      widget.surfaceIds.first,
+    );
+    final data = dataModel.getValue<Object?>(DataPath.root);
+    return const JsonEncoder.withIndent('  ').convert(data);
+  }
+
+  void _subscribeToDataModel() {
+    _dataModelNotifier?.removeListener(_onDataModelChanged);
+    if (widget.surfaceIds.isEmpty) return;
+
+    final dataModel = widget.controller.store.getDataModel(
+      widget.surfaceIds.first,
+    );
+    _dataModelNotifier = dataModel.subscribe<Object?>(DataPath.root);
+    _dataModelNotifier!.addListener(_onDataModelChanged);
+  }
+
+  void _onDataModelChanged() {
+    _dataController.text = _getDataModelJson();
   }
 
   @override
   void dispose() {
+    _dataModelNotifier?.removeListener(_onDataModelChanged);
     _codeController.dispose();
+    _dataController.dispose();
     super.dispose();
   }
 
@@ -132,6 +166,7 @@ class _GalleryDetailDialogState extends State<GalleryDetailDialog> {
                             ),
                           ),
                           Expanded(
+                            flex: 3,
                             child: Container(
                               decoration: BoxDecoration(
                                 color: theme.colorScheme.surfaceContainerLowest,
@@ -142,6 +177,46 @@ class _GalleryDetailDialogState extends State<GalleryDetailDialog> {
                                 child: SingleChildScrollView(
                                   child: CodeField(
                                     controller: _codeController,
+                                    gutterStyle: GutterStyle.none,
+                                    textStyle: const TextStyle(
+                                      fontFamily: 'monospace',
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Divider(height: 1, color: theme.dividerColor),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(color: theme.dividerColor),
+                              ),
+                            ),
+                            child: Text(
+                              'Data',
+                              style: theme.textTheme.labelMedium?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.surfaceContainerLowest,
+                              ),
+                              clipBehavior: Clip.antiAlias,
+                              child: CodeTheme(
+                                data: CodeThemeData(styles: vsTheme),
+                                child: SingleChildScrollView(
+                                  child: CodeField(
+                                    controller: _dataController,
                                     gutterStyle: GutterStyle.none,
                                     textStyle: const TextStyle(
                                       fontFamily: 'monospace',
