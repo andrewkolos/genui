@@ -12,7 +12,7 @@ import 'surface_editor.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Logger.root.level = Level.ALL;
+  Logger.root.level = Level.INFO;
   Logger.root.onRecord.listen((record) {
     debugPrint('${record.level.name}: ${record.time}: ${record.message}');
   });
