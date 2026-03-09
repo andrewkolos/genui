@@ -97,6 +97,35 @@ void main() {
         dataModel.update(DataPath('/a'), {'b': 2});
         expect(value, 2);
       });
+
+      test('root subscriber is notified when a non-root path is updated', () {
+        // Subscribe to root BEFORE any updates — the notifier holds a
+        // reference to the internal `_data` map.
+        final ValueNotifier<Object?> rootNotifier =
+            dataModel.subscribe<Object?>(DataPath.root);
+
+        int notifyCount = 0;
+        rootNotifier.addListener(() => notifyCount++);
+
+        // Update a child path. This mutates `_data` in place (same
+        // reference), so ValueNotifier's `==` check would see no change
+        // and skip the notification.
+        dataModel.update(DataPath('/key'), 'value');
+
+        expect(
+          notifyCount,
+          1,
+          reason:
+              'Root subscriber must be notified when a child path is updated, '
+              'even though the root Map reference has not changed.',
+        );
+
+        // Verify the data is actually there.
+        expect(
+          dataModel.getValue<Object?>(DataPath.root),
+          {'key': 'value'},
+        );
+      });
     });
 
     group('dispose', () {
