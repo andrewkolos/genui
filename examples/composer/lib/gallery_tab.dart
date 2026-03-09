@@ -2,14 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:genui/genui.dart';
 import 'package:logging/logging.dart';
 
-import 'gallery_detail_dialog.dart';
 import 'sample_parser.dart';
 import 'surface_utils.dart';
 
@@ -94,52 +91,8 @@ class _GalleryTabState extends State<GalleryTab>
     }
   }
 
-  /// Opens the detail dialog for a sample.
-  /// Creates a SurfaceController on-demand and feeds messages to it.
-  Future<void> _openSampleDetail(_GallerySampleMeta meta) async {
-    final result = await loadSampleSurface(meta.rawContent);
-
-    if (!mounted) {
-      result.controller.dispose();
-      return;
-    }
-
-    if (result.surfaceIds.isEmpty) {
-      result.controller.dispose();
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('No surfaces found in "${meta.name}"')),
-        );
-      }
-      return;
-    }
-
-    await showDialog<void>(
-      context: context,
-      builder: (context) => GalleryDetailDialog(
-        name: meta.name,
-        rawJsonl: meta.rawJsonl,
-        controller: result.controller,
-        surfaceIds: result.surfaceIds,
-        onOpenInEditor: () {
-          // Extract data model from the controller before closing.
-          String? dataJson;
-          if (result.surfaceIds.isNotEmpty) {
-            final dm = result.controller.store.getDataModel(
-              result.surfaceIds.first,
-            );
-            final data = dm.getValue<Object?>(DataPath.root);
-            if (data is Map && data.isNotEmpty) {
-              dataJson = const JsonEncoder.withIndent('  ').convert(data);
-            }
-          }
-          Navigator.of(context).pop();
-          widget.onOpenInEditor(meta.rawJsonl, dataJson: dataJson);
-        },
-      ),
-    );
-
-    result.controller.dispose();
+  void _openSampleInEditor(_GallerySampleMeta meta) {
+    widget.onOpenInEditor(meta.rawJsonl);
   }
 
   @override
@@ -198,7 +151,7 @@ class _GalleryTabState extends State<GalleryTab>
                                   const SizedBox(height: 12),
                                 _GalleryCard(
                                   meta: _samples[i],
-                                  onTap: () => _openSampleDetail(_samples[i]),
+                                  onTap: () => _openSampleInEditor(_samples[i]),
                                 ),
                               ],
                             ],
