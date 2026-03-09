@@ -1,0 +1,17 @@
+name: data_model_repro
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=3.9.2 <4.0.0"
+  flutter: ">=3.35.7 <4.0.0"
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  genui: ^0.7.0
+
+flutter:
+  uses-material-design: true
