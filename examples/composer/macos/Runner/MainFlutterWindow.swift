@@ -18,8 +18,8 @@ class MainFlutterWindow: NSWindow {
 
     // Set the window size after it's fully initialized.
     // awakeFromNib is too early — Flutter resets the frame.
-    let width: CGFloat = 1400
-    let height: CGFloat = 900
+    let width: CGFloat = 1700
+    let height: CGFloat = 1000
     self.setContentSize(NSSize(width: width, height: height))
     self.center()
   }

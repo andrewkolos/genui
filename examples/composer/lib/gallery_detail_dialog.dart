@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:flutter_highlight/themes/vs.dart';
+import 'package:flutter_highlight/themes/vs2015.dart';
 import 'package:genui/genui.dart';
 import 'package:highlight/languages/json.dart' as json_lang;
 
@@ -103,6 +104,8 @@ class _GalleryDetailDialogState extends State<GalleryDetailDialog> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final codeStyles = isDark ? vs2015Theme : vsTheme;
     final screenSize = MediaQuery.of(context).size;
 
     return Dialog(
@@ -173,7 +176,7 @@ class _GalleryDetailDialogState extends State<GalleryDetailDialog> {
                               ),
                               clipBehavior: Clip.antiAlias,
                               child: CodeTheme(
-                                data: CodeThemeData(styles: vsTheme),
+                                data: CodeThemeData(styles: codeStyles),
                                 child: SingleChildScrollView(
                                   child: CodeField(
                                     controller: _codeController,
@@ -213,7 +216,7 @@ class _GalleryDetailDialogState extends State<GalleryDetailDialog> {
                               ),
                               clipBehavior: Clip.antiAlias,
                               child: CodeTheme(
-                                data: CodeThemeData(styles: vsTheme),
+                                data: CodeThemeData(styles: codeStyles),
                                 child: SingleChildScrollView(
                                   child: CodeField(
                                     controller: _dataController,

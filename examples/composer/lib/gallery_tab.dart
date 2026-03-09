@@ -177,11 +177,7 @@ class _GalleryTabState extends State<GalleryTab>
               builder: (context, constraints) {
                 final double width = constraints.maxWidth;
                 int crossAxisCount = 2;
-                if (width > 1400) {
-                  crossAxisCount = 5;
-                } else if (width > 1100) {
-                  crossAxisCount = 4;
-                } else if (width > 800) {
+                if (width > 1200) {
                   crossAxisCount = 3;
                 }
 
@@ -368,20 +364,9 @@ class _GalleryCardState extends State<_GalleryCard>
 
     return RepaintBoundary(
       child: IgnorePointer(
-        child: FittedBox(
-          fit: BoxFit.fitWidth,
-          alignment: Alignment.topCenter,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              minWidth: 375,
-              maxWidth: 375,
-              maxHeight: 800,
-            ),
-            child: Surface(
-              key: ValueKey(surfaceId),
-              surfaceContext: surfaceContext,
-            ),
-          ),
+        child: Surface(
+          key: ValueKey(surfaceId),
+          surfaceContext: surfaceContext,
         ),
       ),
     );

@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:flutter_highlight/themes/vs.dart';
+import 'package:flutter_highlight/themes/vs2015.dart';
 import 'package:genui/genui.dart';
 import 'package:highlight/languages/json.dart' as json_lang;
 
@@ -413,6 +414,8 @@ class _SurfaceEditorViewState extends State<SurfaceEditorView> {
     required CodeController controller,
     required String? error,
   }) {
+    final codeStyles =
+        theme.brightness == Brightness.dark ? vs2015Theme : vsTheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -436,7 +439,7 @@ class _SurfaceEditorViewState extends State<SurfaceEditorView> {
               ),
               clipBehavior: Clip.antiAlias,
               child: CodeTheme(
-                data: CodeThemeData(styles: vsTheme),
+                data: CodeThemeData(styles: codeStyles),
                 child: SingleChildScrollView(
                   child: CodeField(
                     controller: controller,
