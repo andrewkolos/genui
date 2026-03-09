@@ -78,12 +78,13 @@ class _CreateTabState extends State<CreateTab> {
       // Set up system prompt
       final promptBuilder = PromptBuilder.chat(
         catalog: catalog,
-        instructions:
-            'You are a UI generator. The user will describe a UI they want. '
-            'Generate a single A2UI surface that matches their description. '
-            'Be creative and use appropriate components from the catalog.',
+        systemPromptFragments: [
+          'You are a UI generator. The user will describe a UI they want. '
+              'Generate a single A2UI surface that matches their description. '
+              'Be creative and use appropriate components from the catalog.',
+        ],
       );
-      transport.addSystemMessage(promptBuilder.systemPrompt);
+      transport.addSystemMessage(promptBuilder.systemPromptJoined());
 
       // Capture parsed A2UI messages (these are validated and complete)
       final List<A2uiMessage> parsedMessages = [];
