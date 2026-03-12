@@ -25,18 +25,17 @@ Between each build, edit `pubspec.yaml` to swap dependency sets and run
 
 **Baseline** — no changes. Use the existing pubspec as-is.
 
-**audioplayers + video_player** — add under `dependencies:`:
+**audioplayers + video_player** — add via pub:
 
-```yaml
-audioplayers: ^6.4.0
-video_player: ^2.9.3
+```bash
+dart pub add audioplayers video_player video_player_win
 ```
 
-**fvp + video_player** — replace the above with:
+**fvp + video_player** — remove the above, then add:
 
-```yaml
-fvp: ^0.8.0
-video_player: ^2.9.3
+```bash
+dart pub remove audioplayers video_player video_player_win
+dart pub add fvp video_player
 ```
 
 ## Build & measure per platform

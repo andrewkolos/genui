@@ -1,0 +1,8 @@
+---
+description: An audio player playing a public domain piano clip.
+name: audioPlayer
+prompt: |
+  Generate a 'createSurface' message and a 'updateComponents' message with surfaceId 'main' for an AudioPlayer component that plays a short audio clip.
+---
+{"version":"v0.10","createSurface":{"surfaceId":"main","catalogId":"https://a2ui.org/specification/v0_10/standard_catalog.json"}}
+{"version":"v0.10","updateComponents":{"surfaceId":"main","components":[{"id":"root","component":"Column","children":["audioPlayerComponent"]},{"id":"audioPlayerComponent","component":"AudioPlayer","url":"https://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_320x180.mp4","description":"Big Buck Bunny (public domain)"}]}}
