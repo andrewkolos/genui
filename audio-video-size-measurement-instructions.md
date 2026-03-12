@@ -14,28 +14,55 @@ OS-native libraries vs. heavier bundled-engine libraries:
 2. **audioplayers + video_player** — lightweight, uses OS-native APIs
 3. **fvp + video_player** — bundles libmdk for all-platform video support
 
+## Important: removing deps from genui first
+
+The `genui` package itself depends on `audioplayers`, `video_player`, and
+`video_player_win`. This means `examples/catalog_gallery/` already includes
+those deps transitively via `genui`. Adding them again to catalog_gallery's
+pubspec is a no-op — it won't change the build output.
+
+To get a true baseline, you must **temporarily** modify `packages/genui/`:
+
+1. Remove `audioplayers`, `video_player`, and `video_player_win` from
+   `packages/genui/pubspec.yaml`.
+2. Stub out the two files that import them so the project still compiles:
+   - `packages/genui/lib/src/catalog/basic_catalog_widgets/audio_player.dart`
+   - `packages/genui/lib/src/catalog/basic_catalog_widgets/video.dart`
+
+   Replace each with a minimal stub that exports a placeholder `CatalogItem`
+   (no plugin imports).
+3. Build the baseline and record measurements.
+4. Restore the original genui pubspec and source files for subsequent builds.
+
 ## Setup
 
 All commands run from `examples/catalog_gallery/`.
 
-Between each build, edit `pubspec.yaml` to swap dependency sets and run
-`flutter pub get`. Restore the original pubspec when done.
+Between each build, run `flutter clean`, swap dependency sets in
+`packages/genui/pubspec.yaml`, and run `flutter pub get`. Restore the
+original pubspec and source files when done.
 
-### Dependency sets
+### Dependency sets (pinned versions used for measurements)
 
-**Baseline** — no changes. Use the existing pubspec as-is.
+**Baseline** — genui pubspec with `audioplayers`, `video_player`, and
+`video_player_win` removed, and audio_player.dart / video.dart stubbed out.
 
-**audioplayers + video_player** — add via pub:
+**audioplayers + video_player** — restore the original genui pubspec
+(includes the deps below):
 
-```bash
-dart pub add audioplayers video_player video_player_win
+```yaml
+audioplayers: ^6.6.0
+video_player: ^2.11.1
+video_player_win: ^3.2.2
 ```
 
-**fvp + video_player** — remove the above, then add:
+**fvp + video_player** — in genui's pubspec, replace `audioplayers` and
+`video_player_win` with `fvp` (keep `video_player`). Stub out
+audio_player.dart since `audioplayers` is removed:
 
-```bash
-dart pub remove audioplayers video_player video_player_win
-dart pub add fvp video_player
+```yaml
+fvp: ^0.35.2
+video_player: ^2.11.1
 ```
 
 ## Build & measure per platform
@@ -77,10 +104,10 @@ flutter build windows --release
 
 Fill in the table with your measurements:
 
-| Platform | Baseline | audioplayers + video_player | fvp + video_player        |
-| -------- | -------- | --------------------------- | ------------------------- |
-| Android  | 17.8 MB  | 18.5 MB (+0.7 MB / +4.0%)   | 30.2 MB (+12.4 MB / +70%) |
-| iOS      |          |                             |                           |
-| Linux    |          |                             |                           |
-| Windows  | 30.0 MB  | 30.2 MB (+0.2 MB / +0.6%)   | 44.8 MB (+14.9 MB / +50%) |
-| macOS    | 44 MB    | 46 MB (+2 MB / +5%)         | 68 MB (+24 MB / +55%)     |
+| Platform | Baseline | audioplayers + video_player | fvp + video_player          |
+| -------- | -------- | --------------------------- | --------------------------- |
+| Android  | 17.8 MB  | 18.7 MB (+0.9 MB / +5.1%)   | 30.3 MB (+12.5 MB / +70.3%) |
+| iOS      |          |                             |                             |
+| Linux    |          |                             |                             |
+| Windows  | 29.9 MB  | 30.5 MB (+0.6 MB / +1.9%)   | 44.9 MB (+15.0 MB / +50.1%) |
+| macOS    | 44 MB    | 46 MB (+2 MB / +5%)         | 68 MB (+24 MB / +55%)       |

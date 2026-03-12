@@ -73,19 +73,19 @@ The major caveat, then, is video playback on Linux. Here, there are two options:
 
 ### Size impact (Android arm64 release APK of `examples/catalog_gallery`)
 
-| Build                                            | App Size | Delta          |
-| ------------------------------------------------ | -------- | -------------- |
-| **Baseline** (no audio/video deps)               | 18 MB    | —              |
-| **audioplayers + video_player** (OS-native APIs) | 19 MB    | +1 MB (+4%)    |
-| **fvp** (bundles libmdk, all platforms)          | 30 MB    | +12 MB (+70%)  |
+| Build                                            | App Size | Delta              |
+| ------------------------------------------------ | -------- | ------------------ |
+| **Baseline** (no audio/video deps)               | 17.8 MB  | —                  |
+| **audioplayers + video_player** (OS-native APIs) | 18.7 MB  | +0.9 MB (+5.1%)    |
+| **fvp** (bundles libmdk, all platforms)          | 30.3 MB  | +12.5 MB (+70.3%)  |
 
 ### Size impact (Windows release build of `examples/catalog_gallery`)
 
-| Build                                            | App Size | Delta          |
-| ------------------------------------------------ | -------- | -------------- |
-| **Baseline** (no audio/video deps)               | 30 MB    | —              |
-| **audioplayers + video_player** (OS-native APIs) | 30 MB    | +0 MB (+1%)    |
-| **fvp** (bundles libmdk, all platforms)          | 45 MB    | +15 MB (+50%)  |
+| Build                                            | App Size | Delta              |
+| ------------------------------------------------ | -------- | ------------------ |
+| **Baseline** (no audio/video deps)               | 29.9 MB  | —                  |
+| **audioplayers + video_player** (OS-native APIs) | 30.5 MB  | +0.6 MB (+1.9%)    |
+| **fvp** (bundles libmdk, all platforms)          | 44.9 MB  | +15.0 MB (+50.1%)  |
 
 The lightweight libraries (`audioplayers`, `video_player`) use OS-provided APIs
 (AVPlayer on macOS/iOS, ExoPlayer on Android, HTML elements on web), so they
