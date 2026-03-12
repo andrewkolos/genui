@@ -61,7 +61,7 @@ final audioPlayer = CatalogItem(
         {
           "id": "root",
           "component": "AudioPlayer",
-          "url": "https://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_320x180.mp4"
+          "url": "https://upload.wikimedia.org/wikipedia/commons/d/db/Minuet_in_G_%28Beethoven%29%2C_piano.ogg"
         }
       ]
     ''',
