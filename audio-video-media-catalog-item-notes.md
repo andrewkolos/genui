@@ -71,6 +71,22 @@ The major caveat, then, is video playback on Linux. Here, there are two options:
 | **fvp** (bundles libmdk, all platforms)          | 68 MB    | +24 MB (+55%)  |
 | **media_kit** (bundles libmpv/FFmpeg)            | 91 MB    | +47 MB (+107%) |
 
+### Size impact (Android arm64 release APK of `examples/catalog_gallery`)
+
+| Build                                            | App Size | Delta          |
+| ------------------------------------------------ | -------- | -------------- |
+| **Baseline** (no audio/video deps)               | 18 MB    | —              |
+| **audioplayers + video_player** (OS-native APIs) | 19 MB    | +1 MB (+4%)    |
+| **fvp** (bundles libmdk, all platforms)          | 30 MB    | +12 MB (+70%)  |
+
+### Size impact (Windows release build of `examples/catalog_gallery`)
+
+| Build                                            | App Size | Delta          |
+| ------------------------------------------------ | -------- | -------------- |
+| **Baseline** (no audio/video deps)               | 30 MB    | —              |
+| **audioplayers + video_player** (OS-native APIs) | 30 MB    | +0 MB (+1%)    |
+| **fvp** (bundles libmdk, all platforms)          | 45 MB    | +15 MB (+50%)  |
+
 The lightweight libraries (`audioplayers`, `video_player`) use OS-provided APIs
 (AVPlayer on macOS/iOS, ExoPlayer on Android, HTML elements on web), so they
 add almost no binary weight. `fvp` bundles libmdk and `media_kit` bundles

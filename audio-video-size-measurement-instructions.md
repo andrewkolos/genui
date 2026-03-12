@@ -78,10 +78,10 @@ flutter build windows --release
 
 Fill in the table with your measurements:
 
-| Platform | Baseline | audioplayers + video_player | fvp + video_player |
-| -------- | -------- | -------------------------- | ------------------ |
-| Android  |          |                            |                    |
-| iOS      |          |                            |                    |
-| Linux    |          |                            |                    |
-| Windows  |          |                            |                    |
-| macOS    | 44 MB    | 46 MB (+2 MB / +5%)        | 68 MB (+24 MB / +55%) |
+| Platform | Baseline | audioplayers + video_player | fvp + video_player        |
+| -------- | -------- | --------------------------- | ------------------------- |
+| Android  | 17.8 MB  | 18.5 MB (+0.7 MB / +4.0%)   | 30.2 MB (+12.4 MB / +70%) |
+| iOS      |          |                             |                           |
+| Linux    |          |                             |                           |
+| Windows  | 30.0 MB  | 30.2 MB (+0.2 MB / +0.6%)   | 44.8 MB (+14.9 MB / +50%) |
+| macOS    | 44 MB    | 46 MB (+2 MB / +5%)         | 68 MB (+24 MB / +55%)     |
