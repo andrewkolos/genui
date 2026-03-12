@@ -83,6 +83,7 @@ class _AudioPlayerWidgetState extends State<_AudioPlayerWidget> {
   bool _isPlaying = false;
   Duration _position = Duration.zero;
   Duration _duration = Duration.zero;
+  double _volume = 1.0;
 
   @override
   void initState() {
@@ -198,6 +199,31 @@ class _AudioPlayerWidgetState extends State<_AudioPlayerWidget> {
                 Text(
                   _formatDuration(_duration),
                   style: theme.textTheme.bodySmall,
+                ),
+                const SizedBox(width: 12),
+                Icon(
+                  _volume == 0
+                      ? Icons.volume_off
+                      : _volume < 0.5
+                          ? Icons.volume_down
+                          : Icons.volume_up,
+                  size: 20,
+                ),
+                SizedBox(
+                  width: 100,
+                  child: SliderTheme(
+                    data: SliderTheme.of(context).copyWith(
+                      overlayShape: SliderComponentShape.noOverlay,
+                      padding: EdgeInsets.zero,
+                    ),
+                    child: Slider(
+                      value: _volume,
+                      onChanged: (value) {
+                        setState(() => _volume = value);
+                        _player.setVolume(value);
+                      },
+                    ),
+                  ),
                 ),
               ],
             ),
