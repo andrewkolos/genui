@@ -104,10 +104,18 @@ flutter build windows --release
 
 Fill in the table with your measurements:
 
-| Platform | Baseline | audioplayers + video_player | fvp + video_player          |
-| -------- | -------- | --------------------------- | --------------------------- |
-| Android  | 17.8 MB  | 18.7 MB (+0.9 MB / +5.1%)   | 30.3 MB (+12.5 MB / +70.3%) |
-| iOS      |          |                             |                             |
-| Linux    |          |                             |                             |
-| Windows  | 29.9 MB  | 30.5 MB (+0.6 MB / +1.9%)   | 44.9 MB (+15.0 MB / +50.1%) |
-| macOS    | 44 MB    | 46 MB (+2 MB / +5%)         | 68 MB (+24 MB / +55%)       |
+| Platform | Baseline | audioplayers + video_player  | fvp + video_player           |
+| -------- | -------- | ---------------------------- | ---------------------------- |
+| Android  | 17.8 MB  | 18.7 MB (+0.9 MB / +5.1%)    | 30.3 MB (+12.5 MB / +70.3%)  |
+| iOS*     | 18.3 MB  | 26.9 MB (+8.6 MB / +47%)     |                              |
+| Linux    |          |                              |                              |
+| Windows  | 29.9 MB  | 30.5 MB (+0.6 MB / +1.9%)    | 44.9 MB (+15.0 MB / +50.1%)  |
+| macOS    | 44 MB    | 46 MB (+2 MB / +5%)          | 68 MB (+24 MB / +55%)        |
+
+\* 7.4 MB of the iOS increase is `libswift_Concurrency.dylib`, a Swift
+concurrency runtime back-deployment library. Swift concurrency (async/await) is
+built into iOS 15+, but Flutter's minimum deployment target is iOS 13, so Xcode
+bundles the full concurrency runtime into the app. The actual plugin binaries
+(`audioplayers_darwin`, `video_player_avfoundation`, `objective_c`) add only
+~728 KB. This is a one-time cost — apps that already include any Swift
+concurrency plugin, or that target iOS 15+, would not see this overhead.
