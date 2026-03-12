@@ -102,20 +102,22 @@ flutter build windows --release
 
 ## Recording results
 
+For reference, the following artifacts were measured for each platform:
+*   **Android**: `build/app/outputs/flutter-apk/app-arm64-v8a-release.apk`
+*   **iOS**: `build/ios/iphoneos/Runner.app`
+*   **Linux**: `build/linux/x64/release/bundle`
+*   **Windows**: `build\windows\x64\runner\Release\`
+*   **macOS**: `build/macos/Build/Products/Release/Runner.app`
+
 Fill in the table with your measurements:
 
 | Platform | Baseline | audioplayers + video_player  | fvp + video_player           |
 | -------- | -------- | ---------------------------- | ---------------------------- |
 | Android  | 17.8 MB  | 18.7 MB (+0.9 MB / +5.1%)    | 30.3 MB (+12.5 MB / +70.3%)  |
-| iOS*     | 18.3 MB  | 26.9 MB (+8.6 MB / +47%)     |                              |
+| iOS*     | 18.0 MB  | 20.0 MB (+2.0 MB / +11.1%)   |                              |
 | Linux    |          |                              |                              |
 | Windows  | 29.9 MB  | 30.5 MB (+0.6 MB / +1.9%)    | 44.9 MB (+15.0 MB / +50.1%)  |
 | macOS    | 44 MB    | 46 MB (+2 MB / +5%)          | 68 MB (+24 MB / +55%)        |
 
-\* 7.4 MB of the iOS increase is `libswift_Concurrency.dylib`, a Swift
-concurrency runtime back-deployment library. Swift concurrency (async/await) is
-built into iOS 15+, but Flutter's minimum deployment target is iOS 13, so Xcode
-bundles the full concurrency runtime into the app. The actual plugin binaries
-(`audioplayers_darwin`, `video_player_avfoundation`, `objective_c`) add only
-~728 KB. This is a one-time cost — apps that already include any Swift
-concurrency plugin, or that target iOS 15+, would not see this overhead.
+\* These measurements were taken with the minimum iOS deployment target set to iOS 15.0. If an app targets iOS 13 or 14 (Flutter's default minimum is 13), the size impact will be much larger (+8.6 MB total instead of +2.0 MB). This is because iOS < 15 lacks built-in support for Swift concurrency (async/await), forcing Xcode to bundle the `libswift_Concurrency.dylib` back-deployment library (~7.4 MB) into the app framework. Apps that already include any Swift concurrency plugin, or that target iOS 15+, do not pay this cost.
+
