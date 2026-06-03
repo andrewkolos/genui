@@ -9,19 +9,19 @@ import '../primitives/event_notifier.dart';
 class ComponentModel {
   final String id;
   final String type;
-  Map<String, dynamic> _properties;
+  Map<String, Object?> _properties;
   final _onUpdated = EventNotifier<ComponentModel>();
 
   /// Fires whenever the component's properties are updated.
   EventListenable<ComponentModel> get onUpdated => _onUpdated;
 
-  ComponentModel(this.id, this.type, Map<String, dynamic> initialProperties)
+  ComponentModel(this.id, this.type, Map<String, Object?> initialProperties)
     : _properties = Map.from(initialProperties);
 
   /// The current properties of the component.
-  Map<String, dynamic> get properties => _properties;
+  Map<String, Object?> get properties => _properties;
 
-  set properties(Map<String, dynamic> newProperties) {
+  set properties(Map<String, Object?> newProperties) {
     _properties = Map.from(newProperties);
     _onUpdated.emit(this);
   }
@@ -32,7 +32,7 @@ class ComponentModel {
   }
 
   /// Returns a JSON representation of the component tree.
-  Map<String, dynamic> toJson() {
+  Map<String, Object?> toJson() {
     return {'id': id, 'component': type, ..._properties};
   }
 }

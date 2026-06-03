@@ -12,21 +12,21 @@ void main() {
     test('clientFunctions schema contains pluralize and openUrl', () {
       final Schema schema = A2uiSchemas.clientFunctions();
       final String jsonStr = schema.toJson();
-      final json = jsonDecode(jsonStr) as Map<String, dynamic>;
+      final json = jsonDecode(jsonStr) as Map<String, Object?>;
 
       expect(json['type'], 'array');
-      final items = json['items'] as Map<String, dynamic>;
-      expect(items['oneOf'], isA<List<dynamic>>());
-      final oneOf = items['oneOf'] as List<dynamic>;
+      final items = json['items'] as Map<String, Object?>;
+      expect(items['oneOf'], isA<List<Object?>>());
+      final oneOf = items['oneOf'] as List<Object?>;
 
       var hasPluralize = false;
       var hasOpenUrl = false;
 
       for (final item in oneOf) {
-        final itemMap = item as Map<String, dynamic>;
-        final properties = itemMap['properties'] as Map<String, dynamic>?;
+        final itemMap = item as Map<String, Object?>;
+        final properties = itemMap['properties'] as Map<String, Object?>?;
         if (properties != null) {
-          final call = properties['call'] as Map<String, dynamic>?;
+          final call = properties['call'] as Map<String, Object?>?;
           if (call != null) {
             final constValue = call['const'] as String?;
             if (constValue == 'pluralize') {

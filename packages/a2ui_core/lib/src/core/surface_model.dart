@@ -16,7 +16,7 @@ import 'messages.dart';
 class SurfaceModel<T extends ComponentApi> {
   final String id;
   final Catalog<T> catalog;
-  final Map<String, dynamic> theme;
+  final Map<String, Object?> theme;
   final bool sendDataModel;
 
   final DataModel dataModel;
@@ -41,27 +41,27 @@ class SurfaceModel<T extends ComponentApi> {
 
   /// Dispatches an action from this surface.
   Future<void> dispatchAction(
-    Map<String, dynamic> payload,
+    Map<String, Object?> payload,
     String sourceComponentId,
   ) async {
     if (payload.containsKey('event')) {
-      final event = payload['event'] as Map<String, dynamic>;
+      final event = payload['event'] as Map<String, Object?>;
       final action = A2uiClientAction(
         name: (event['name'] as String?) ?? 'unknown',
         surfaceId: id,
         sourceComponentId: sourceComponentId,
         timestamp: DateTime.now(),
-        context: Map<String, dynamic>.from(
-          (event['context'] ?? <String, dynamic>{}) as Map,
+        context: Map<String, Object?>.from(
+          (event['context'] ?? <String, Object?>{}) as Map,
         ),
       );
       _onAction.emit(action);
     } else if (payload.containsKey('functionCall')) {
-      final callJson = payload['functionCall'] as Map<String, dynamic>;
+      final callJson = payload['functionCall'] as Map<String, Object?>;
       final call = FunctionCall.fromJson(callJson);
       catalog.invoke(
         call.call,
-        Map<String, dynamic>.from(call.args),
+        Map<String, Object?>.from(call.args),
         DataContext(dataModel, catalog.invoke, '/'),
       );
     }

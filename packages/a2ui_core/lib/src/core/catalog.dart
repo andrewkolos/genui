@@ -44,7 +44,7 @@ abstract class FunctionApi {
 abstract class FunctionImplementation extends FunctionApi {
   /// Executes the function. Can return a static value or a [ReadonlySignal].
   Object? execute(
-    Map<String, dynamic> args,
+    Map<String, Object?> args,
     DataContext context, [
     CancellationSignal? cancellationSignal,
   ]);

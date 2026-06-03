@@ -154,28 +154,28 @@ class SurfaceDefinition {
   /// Throws [A2uiValidationException] if validation fails.
   void validate(Schema schema) {
     final String jsonOutput = schema.toJson();
-    final schemaMap = jsonDecode(jsonOutput) as Map<String, dynamic>;
+    final schemaMap = jsonDecode(jsonOutput) as Map<String, Object?>;
 
-    List<Map<String, dynamic>> allowedSchemas = [];
+    List<Map<String, Object?>> allowedSchemas = [];
     if (schemaMap.containsKey('oneOf')) {
       allowedSchemas = (schemaMap['oneOf'] as List)
-          .cast<Map<String, dynamic>>();
+          .cast<Map<String, Object?>>();
     } else if (schemaMap.containsKey('properties') &&
         (schemaMap['properties'] as Map).containsKey('components')) {
       final componentsProp =
           (schemaMap['properties'] as Map)['components']
-              as Map<String, dynamic>;
+              as Map<String, Object?>;
       if (componentsProp.containsKey('items')) {
-        final items = componentsProp['items'] as Map<String, dynamic>;
+        final items = componentsProp['items'] as Map<String, Object?>;
         if (items.containsKey('oneOf')) {
           allowedSchemas = (items['oneOf'] as List)
-              .cast<Map<String, dynamic>>();
+              .cast<Map<String, Object?>>();
         } else {
           allowedSchemas = [items];
         }
       } else if (componentsProp.containsKey('properties')) {
         allowedSchemas = (componentsProp['properties'] as Map).values
-            .cast<Map<String, dynamic>>()
+            .cast<Map<String, Object?>>()
             .toList();
       }
     }
@@ -219,13 +219,13 @@ class SurfaceDefinition {
     }
   }
 
-  bool _schemaMatchesType(Map<String, dynamic> schema, String type) {
+  bool _schemaMatchesType(Map<String, Object?> schema, String type) {
     if (schema case {
-      'properties': {'component': Map<String, dynamic> compProp},
+      'properties': {'component': Map<String, Object?> compProp},
     }) {
       return switch (compProp) {
         {'const': String constType} when constType == type => true,
-        {'enum': List<dynamic> enums} when enums.contains(type) => true,
+        {'enum': List<Object?> enums} when enums.contains(type) => true,
         _ => false,
       };
     }
@@ -234,7 +234,7 @@ class SurfaceDefinition {
 
   void _validateInstance(
     Object? instance,
-    Map<String, dynamic> schema,
+    Map<String, Object?> schema,
     String path,
   ) {
     if (instance == null) {
@@ -250,7 +250,7 @@ class SurfaceDefinition {
     }
 
     if (schema case {
-      'enum': List<dynamic> enums,
+      'enum': List<Object?> enums,
     } when !enums.contains(instance)) {
       throw A2uiValidationException(
         'Value not in enum: $instance',
@@ -259,7 +259,7 @@ class SurfaceDefinition {
       );
     }
 
-    if (schema case {'required': List<dynamic> required} when instance is Map) {
+    if (schema case {'required': List<Object?> required} when instance is Map) {
       for (final String key in required.cast<String>()) {
         if (!instance.containsKey(key)) {
           throw A2uiValidationException(
@@ -272,11 +272,11 @@ class SurfaceDefinition {
     }
 
     if (schema case {
-      'properties': Map<String, dynamic> props,
+      'properties': Map<String, Object?> props,
     } when instance is Map) {
-      for (final MapEntry<String, dynamic> entry in props.entries) {
+      for (final MapEntry<String, Object?> entry in props.entries) {
         final String key = entry.key;
-        final propSchema = entry.value as Map<String, dynamic>;
+        final propSchema = entry.value as Map<String, Object?>;
         if (instance.containsKey(key)) {
           _validateInstance(instance[key], propSchema, '$path/$key');
         }
@@ -284,17 +284,17 @@ class SurfaceDefinition {
     }
 
     if (schema case {
-      'items': Map<String, dynamic> itemsSchema,
+      'items': Map<String, Object?> itemsSchema,
     } when instance is List) {
       for (var i = 0; i < instance.length; i++) {
         _validateInstance(instance[i], itemsSchema, '$path/$i');
       }
     }
 
-    if (schema case {'oneOf': List<dynamic> oneOfs}) {
+    if (schema case {'oneOf': List<Object?> oneOfs}) {
       var oneMatched = false;
-      for (final Map<String, dynamic> s
-          in oneOfs.cast<Map<String, dynamic>>()) {
+      for (final Map<String, Object?> s
+          in oneOfs.cast<Map<String, Object?>>()) {
         try {
           _validateInstance(instance, s, path);
           oneMatched = true;

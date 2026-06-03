@@ -85,7 +85,7 @@ class _AudioPlayerWidget extends StatefulWidget {
 
 class _AudioPlayerWidgetState extends State<_AudioPlayerWidget> {
   late final ap.AudioPlayer _player;
-  late final List<StreamSubscription<dynamic>> _subscriptions;
+  late final List<StreamSubscription<Object?>> _subscriptions;
   bool _isPlaying = false;
   Duration _position = Duration.zero;
   Duration _duration = Duration.zero;
@@ -146,7 +146,7 @@ class _AudioPlayerWidgetState extends State<_AudioPlayerWidget> {
 
   @override
   void dispose() {
-    for (final StreamSubscription<dynamic> sub in _subscriptions) {
+    for (final StreamSubscription<Object?> sub in _subscriptions) {
       sub.cancel();
     }
     _player.dispose();

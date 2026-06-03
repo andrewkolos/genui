@@ -150,7 +150,7 @@ class _TrackingFunction extends FunctionImplementation {
 
   @override
   Object? execute(
-    Map<String, dynamic> args,
+    Map<String, Object?> args,
     DataContext context, [
     CancellationSignal? cancellationSignal,
   ]) {

@@ -169,10 +169,10 @@ interface class Conversation {
     const ConversationState(surfaces: [], latestText: '', isWaiting: false),
   );
 
-  StreamSubscription<dynamic>? _transportSubscription;
-  StreamSubscription<dynamic>? _textSubscription;
-  StreamSubscription<dynamic>? _engineSubscription;
-  StreamSubscription<dynamic>? _engineSubmitSubscription;
+  StreamSubscription<Object?>? _transportSubscription;
+  StreamSubscription<Object?>? _textSubscription;
+  StreamSubscription<Object?>? _engineSubscription;
+  StreamSubscription<Object?>? _engineSubmitSubscription;
 
   /// A stream of events emitted by the conversation.
   Stream<ConversationEvent> get events => _eventController.stream;

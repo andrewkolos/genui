@@ -164,7 +164,7 @@ final class CreateSurface extends A2uiMessage {
   final bool sendDataModel;
 
   /// Converts this message to a JSON map.
-  Map<String, dynamic> toJson() => {
+  Map<String, Object?> toJson() => {
     'version': 'v0.9',
     surfaceIdKey: surfaceId,
     'catalogId': catalogId,
@@ -195,7 +195,7 @@ final class UpdateComponents extends A2uiMessage {
   final List<Component> components;
 
   /// Converts this message to a JSON map.
-  Map<String, dynamic> toJson() => {
+  Map<String, Object?> toJson() => {
     'version': 'v0.9',
     surfaceIdKey: surfaceId,
     'components': components.map((c) => c.toJson()).toList(),
@@ -233,7 +233,7 @@ final class UpdateDataModel extends A2uiMessage {
   final Object? value;
 
   /// Converts this message to a JSON map.
-  Map<String, dynamic> toJson() => {
+  Map<String, Object?> toJson() => {
     'version': 'v0.9',
     surfaceIdKey: surfaceId,
     'path': path.toString(),
@@ -255,5 +255,5 @@ final class DeleteSurface extends A2uiMessage {
   final String surfaceId;
 
   /// Converts this message to a JSON map.
-  Map<String, dynamic> toJson() => {'version': 'v0.9', surfaceIdKey: surfaceId};
+  Map<String, Object?> toJson() => {'version': 'v0.9', surfaceIdKey: surfaceId};
 }

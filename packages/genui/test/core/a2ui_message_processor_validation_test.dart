@@ -19,8 +19,8 @@ void main() {
           predicate((ChatMessage message) {
             final UiInteractionPart part =
                 message.parts.uiInteractionParts.first;
-            final json = jsonDecode(part.interaction) as Map<String, dynamic>;
-            final error = json['error'] as Map<String, dynamic>;
+            final json = jsonDecode(part.interaction) as Map<String, Object?>;
+            final error = json['error'] as Map<String, Object?>;
             return error['code'] == 'VALIDATION_FAILED' &&
                 error['path'] == 'surfaceId';
           }),
@@ -47,8 +47,8 @@ void main() {
             predicate((ChatMessage message) {
               final UiInteractionPart part =
                   message.parts.uiInteractionParts.first;
-              final json = jsonDecode(part.interaction) as Map<String, dynamic>;
-              final error = json['error'] as Map<String, dynamic>;
+              final json = jsonDecode(part.interaction) as Map<String, Object?>;
+              final error = json['error'] as Map<String, Object?>;
               return error['code'] == 'VALIDATION_FAILED' &&
                   error['path'] == '/components/badText';
             }),

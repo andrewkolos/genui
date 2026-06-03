@@ -77,14 +77,14 @@ void main() {
     });
 
     test('generates client capabilities with inline catalogs', () {
-      final Map<String, dynamic> caps = processor.getClientCapabilities(
+      final Map<String, Object?> caps = processor.getClientCapabilities(
         includeInlineCatalogs: true,
       );
-      final v09 = caps['v0.9'] as Map<String, dynamic>;
+      final v09 = caps['v0.9'] as Map<String, Object?>;
       expect(v09['supportedCatalogIds'], contains(catalog.id));
 
       final inline = v09['inlineCatalogs'] as List;
-      final first = inline.first as Map<String, dynamic>;
+      final first = inline.first as Map<String, Object?>;
       expect(first['catalogId'], catalog.id);
       expect(first['components'], contains('Text'));
     });
@@ -123,9 +123,9 @@ void main() {
         UpdateDataModelMessage(surfaceId: 's2', path: '/secret', value: 'baz'),
       ]);
 
-      final Map<String, dynamic>? dataModel = processor.getClientDataModel();
+      final Map<String, Object?>? dataModel = processor.getClientDataModel();
       expect(dataModel, isNotNull);
-      final surfaces = dataModel?['surfaces'] as Map<String, dynamic>?;
+      final surfaces = dataModel?['surfaces'] as Map<String, Object?>?;
       expect(surfaces, contains('s1'));
       expect(surfaces, isNot(contains('s2')));
       expect(surfaces?['s1'], {'foo': 'bar'});

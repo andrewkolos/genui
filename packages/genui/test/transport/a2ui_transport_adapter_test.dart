@@ -22,7 +22,7 @@ void main() {
     });
 
     test('addChunk flows text to textStream', () async {
-      final Future<dynamic> textFuture = expectLater(
+      final Future<Object?> textFuture = expectLater(
         transportAdapter.incomingText,
         emitsInOrder(['Hello']),
       );
@@ -36,7 +36,7 @@ void main() {
 {"version": "v0.9", "createSurface": {"surfaceId": "test_chunk", "catalogId": "test-cat"}}
 ```''';
 
-      final Future<dynamic> stateFuture = expectLater(
+      final Future<Object?> stateFuture = expectLater(
         transportAdapter.incomingMessages,
         emits(
           isA<CreateSurface>().having((e) => e.surfaceId, 'id', 'test_chunk'),
@@ -53,7 +53,7 @@ void main() {
         catalogId: 'direct-cat',
       );
 
-      final Future<dynamic> stateFuture = expectLater(
+      final Future<Object?> stateFuture = expectLater(
         transportAdapter.incomingMessages,
         emits(
           isA<CreateSurface>().having((e) => e.surfaceId, 'id', 'direct_msg'),

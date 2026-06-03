@@ -243,7 +243,7 @@ class _BoundListState extends BoundValueState<List<Object?>, BoundList> {
           return null;
         }),
       ),
-      List<dynamic> value => ValueNotifier<List<Object?>?>(
+      List<Object?> value => ValueNotifier<List<Object?>?>(
         value.cast<Object?>(),
       ),
       _ => ValueNotifier<List<Object?>?>(null),

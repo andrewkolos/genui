@@ -155,7 +155,7 @@ class ExpressionParser {
     scanner.match('(');
     scanner.skipWhitespace();
 
-    final args = <String, dynamic>{};
+    final args = <String, Object?>{};
 
     while (!scanner.isAtEnd && scanner.peek() != ')') {
       final String argName = _scanIdentifier(scanner);

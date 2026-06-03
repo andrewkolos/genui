@@ -27,8 +27,8 @@ void main() {
     test('auto-vivifies maps and lists', () {
       final model = DataModel();
       model.set('/users/0/name', 'Alice');
-      expect(model.get('/users'), isA<List<dynamic>>());
-      expect(model.get('/users/0'), isA<Map<dynamic, dynamic>>());
+      expect(model.get('/users'), isA<List<Object?>>());
+      expect(model.get('/users/0'), isA<Map<Object?, Object?>>());
       expect(model.get('/users/0/name'), 'Alice');
     });
 

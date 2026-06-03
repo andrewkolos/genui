@@ -19,7 +19,7 @@ void main() {
       surface = SurfaceModel('s1', catalog: catalog);
     });
 
-    test('resolves dynamic properties', () {
+    test('resolves Object? properties', () {
       final comp = ComponentModel('c1', 'Text', {
         'text': {'path': '/val'},
       });

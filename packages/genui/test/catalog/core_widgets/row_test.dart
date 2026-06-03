@@ -122,7 +122,7 @@ void main() {
     );
   });
 
-  testWidgets('Row widget renders dynamic children from template', (
+  testWidgets('Row widget renders Object? children from template', (
     WidgetTester tester,
   ) async {
     final surfaceController = SurfaceController(

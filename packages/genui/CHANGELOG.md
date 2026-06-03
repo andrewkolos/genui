@@ -1,5 +1,9 @@
 # `genui` Changelog
 
+## Unreleased
+
+- **BREAKING**: Replaced usages of `dynamic` with `Object?` across public APIs to improve type safety.
+
 ## 0.9.2
 
 - **Feature**: Updated example/README.md.

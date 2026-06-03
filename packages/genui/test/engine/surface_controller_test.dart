@@ -217,12 +217,12 @@ void main() {
         final ChatMessage message = await messageFuture;
         expect(message.role, ChatMessageRole.user);
         final UiInteractionPart part = message.parts.uiInteractionParts.first;
-        final errorJson = jsonDecode(part.interaction) as Map<String, dynamic>;
+        final errorJson = jsonDecode(part.interaction) as Map<String, Object?>;
 
         expect(errorJson['version'], 'v0.9');
         final Object? errorObj = errorJson['error'];
-        expect(errorObj, isA<Map<String, dynamic>>());
-        final errorMap = errorObj! as Map<String, dynamic>;
+        expect(errorObj, isA<Map<String, Object?>>());
+        final errorMap = errorObj! as Map<String, Object?>;
         expect(errorMap['code'], 'VALIDATION_FAILED');
         expect(errorMap['surfaceId'], '');
         expect(errorMap['path'], 'surfaceId');
@@ -324,9 +324,9 @@ void main() {
 
         final ChatMessage message = await future;
         final UiInteractionPart part = message.parts.uiInteractionParts.first;
-        final errorJson = jsonDecode(part.interaction) as Map<String, dynamic>;
+        final errorJson = jsonDecode(part.interaction) as Map<String, Object?>;
 
-        final errorObj = errorJson['error'] as Map<String, dynamic>;
+        final errorObj = errorJson['error'] as Map<String, Object?>;
         expect(errorObj['code'], 'VALIDATION_FAILED');
         expect(errorObj['message'], contains('Missing required property'));
       },

@@ -151,8 +151,8 @@ abstract final class BasicCatalogItems {
 /// The text content of basic_catalog_rules.txt.
 const String _basicCatalogRules = r'''
 **REQUIRED PROPERTIES:** You MUST include ALL required properties for every component, even if they are inside a template or will be bound to data.
-- For 'Text', you MUST provide 'text'. If dynamic, use { "path": "..." }.
-- For 'Image', you MUST provide 'url'. If dynamic, use { "path": "..." }.
+- For 'Text', you MUST provide 'text'. If Object?, use { "path": "..." }.
+- For 'Image', you MUST provide 'url'. If Object?, use { "path": "..." }.
 - For 'Button', you MUST provide 'action'.
 - For 'TextField', 'CheckBox', etc., you MUST provide 'label'.
 

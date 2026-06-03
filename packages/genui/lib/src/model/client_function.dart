@@ -37,11 +37,11 @@ abstract interface class ExecutionContext {
   /// Resolves a path against the current context's path.
   DataPath resolvePath(DataPath pathToResolve);
 
-  /// Resolves any dynamic values (bindings or function calls) in the given
+  /// Resolves any Object? values (bindings or function calls) in the given
   /// value.
   Stream<Object?> resolve(Object? value);
 
-  /// Evaluates a dynamic boolean condition and returns a [Stream<bool>].
+  /// Evaluates a Object? boolean condition and returns a [Stream<bool>].
   Stream<bool> evaluateConditionStream(Object? condition);
 }
 

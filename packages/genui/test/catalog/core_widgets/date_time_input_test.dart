@@ -252,7 +252,7 @@ void main() {
   });
 }
 
-(SurfaceHost, String) setup(String componentId, Map<String, dynamic> props) {
+(SurfaceHost, String) setup(String componentId, Map<String, Object?> props) {
   final catalog = Catalog(
     [BasicCatalogItems.dateTimeInput],
     catalogId: 'test_catalog',

@@ -211,7 +211,7 @@ void main() {
       expect(textSchema.containsKey('properties'), isTrue);
 
       expect(json.containsKey('functions'), isTrue);
-      final functions = json['functions'] as List<dynamic>;
+      final functions = json['functions'] as List<Object?>;
       expect(functions.length, 1);
       final firstFunc = functions.first as JsonMap;
       expect(firstFunc['name'], 'regex');

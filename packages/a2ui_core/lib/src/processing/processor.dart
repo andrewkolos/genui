@@ -70,7 +70,7 @@ class MessageProcessor<T extends ComponentApi> {
       throw A2uiStateError('Surface not found: ${message.surfaceId}');
     }
 
-    for (final Map<String, dynamic> compJson in message.components) {
+    for (final Map<String, Object?> compJson in message.components) {
       final id = compJson['id'] as String?;
       final type = compJson['component'] as String?;
 
@@ -79,7 +79,7 @@ class MessageProcessor<T extends ComponentApi> {
       }
 
       final ComponentModel? existing = surface.componentsModel.get(id);
-      final props = Map<String, dynamic>.from(compJson)
+      final props = Map<String, Object?>.from(compJson)
         ..remove('id')
         ..remove('component');
 
@@ -116,10 +116,10 @@ class MessageProcessor<T extends ComponentApi> {
   }
 
   /// Generates client capabilities.
-  Map<String, dynamic> getClientCapabilities({
+  Map<String, Object?> getClientCapabilities({
     bool includeInlineCatalogs = false,
   }) {
-    final v09 = <String, dynamic>{
+    final v09 = <String, Object?>{
       'supportedCatalogIds': catalogs.map((c) => c.id).toList(),
     };
 
@@ -130,10 +130,10 @@ class MessageProcessor<T extends ComponentApi> {
     return {'v0.9': v09};
   }
 
-  Map<String, dynamic> _generateInlineCatalog(Catalog<T> catalog) {
-    final components = <String, dynamic>{};
+  Map<String, Object?> _generateInlineCatalog(Catalog<T> catalog) {
+    final components = <String, Object?>{};
     for (final MapEntry<String, T> entry in catalog.components.entries) {
-      final Map<String, dynamic> jsonSchema = entry.value.schema.toJsonMap();
+      final Map<String, Object?> jsonSchema = entry.value.schema.toJsonMap();
       _processRefs(jsonSchema);
 
       // Wrap in A2UI envelope
@@ -143,7 +143,7 @@ class MessageProcessor<T extends ComponentApi> {
           {
             'properties': {
               'component': {'const': entry.key},
-              ...?(jsonSchema['properties'] as Map<String, dynamic>?),
+              ...?(jsonSchema['properties'] as Map<String, Object?>?),
             },
             'required': ['component', ...?(jsonSchema['required'] as List?)],
           },
@@ -154,7 +154,7 @@ class MessageProcessor<T extends ComponentApi> {
     final List<Map<String, Object>> functions = catalog.functions.values.map((
       f,
     ) {
-      final Map<String, dynamic> jsonSchema = f.argumentSchema.toJsonMap();
+      final Map<String, Object?> jsonSchema = f.argumentSchema.toJsonMap();
       _processRefs(jsonSchema);
       return {
         'name': f.name,
@@ -163,11 +163,11 @@ class MessageProcessor<T extends ComponentApi> {
       };
     }).toList();
 
-    Map<String, dynamic>? theme;
+    Map<String, Object?>? theme;
     if (catalog.themeSchema != null) {
       theme = catalog.themeSchema!.toJsonMap();
       _processRefs(theme);
-      theme = theme['properties'] as Map<String, dynamic>?;
+      theme = theme['properties'] as Map<String, Object?>?;
     }
 
     return {
@@ -210,8 +210,8 @@ class MessageProcessor<T extends ComponentApi> {
   }
 
   /// Aggregates data models for surfaces with sendDataModel enabled.
-  Map<String, dynamic>? getClientDataModel() {
-    final surfaces = <String, dynamic>{};
+  Map<String, Object?>? getClientDataModel() {
+    final surfaces = <String, Object?>{};
     for (final SurfaceModel<T> surface in groupModel.allSurfaces) {
       if (surface.sendDataModel) {
         surfaces[surface.id] = surface.dataModel.get('/');
@@ -225,9 +225,9 @@ class MessageProcessor<T extends ComponentApi> {
 }
 
 extension SchemaExtension on Schema {
-  Map<String, dynamic> toJsonMap() => _deepCopy(value);
+  Map<String, Object?> toJsonMap() => _deepCopy(value);
 
-  static Map<String, dynamic> _deepCopy(Map<dynamic, dynamic> map) {
+  static Map<String, Object?> _deepCopy(Map<Object?, Object?> map) {
     return map.map((key, value) {
       if (value is Map) {
         return MapEntry(key as String, _deepCopy(value));

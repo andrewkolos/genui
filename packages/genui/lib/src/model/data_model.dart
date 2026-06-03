@@ -103,7 +103,7 @@ class DataContext implements cf.ExecutionContext {
   DataPath resolvePath(DataPath pathToResolve) =>
       pathToResolve.isAbsolute ? pathToResolve : path.join(pathToResolve);
 
-  /// Resolves any dynamic values (bindings or function calls) in the given
+  /// Resolves any Object? values (bindings or function calls) in the given
   /// value.
   ///
   /// String values are treated as literals (no interpolation).
@@ -167,7 +167,7 @@ class DataContext implements cf.ExecutionContext {
     });
   }
 
-  /// Evaluates a dynamic boolean condition and returns a [Stream<bool>].
+  /// Evaluates a Object? boolean condition and returns a [Stream<bool>].
   @override
   Stream<bool> evaluateConditionStream(Object? condition) {
     if (condition == null) return Stream.value(false);
@@ -461,7 +461,7 @@ class InMemoryDataModel implements DataModel {
 
         final String nextSegment = remaining.first;
         final isNextSegmentListIndex = int.tryParse(nextSegment) != null;
-        nextNode = isNextSegmentListIndex ? <dynamic>[] : <String, dynamic>{};
+        nextNode = isNextSegmentListIndex ? <Object?>[] : <String, Object?>{};
         current[segment] = nextNode;
       }
       _updateValue(nextNode, remaining, value);
@@ -485,8 +485,8 @@ class InMemoryDataModel implements DataModel {
             final String nextSegment = remaining.first;
             final isNextSegmentListIndex = int.tryParse(nextSegment) != null;
             final Object newItem = isNextSegmentListIndex
-                ? <dynamic>[]
-                : <String, dynamic>{};
+                ? <Object?>[]
+                : <String, Object?>{};
             current.add(newItem);
             _updateValue(newItem, remaining, value);
           }

@@ -13,7 +13,7 @@ import 'surface_model.dart';
 typedef FunctionInvoker =
     Object? Function(
       String name,
-      Map<String, dynamic> args,
+      Map<String, Object?> args,
       DataContext context,
     );
 
@@ -40,16 +40,16 @@ class DataContext {
     return '$base/$relativePath';
   }
 
-  /// Returns the evaluated result of a dynamic value (literal, data binding,
+  /// Returns the evaluated result of a Object? value (literal, data binding,
   /// or function call) at the current moment. Does not create subscriptions.
   Object? resolveSync(Object? value) {
     if (value is Map && value.containsKey('path')) {
       return dataModel.get(resolvePath(value['path'] as String));
     }
     if (value is Map && value.containsKey('call')) {
-      final call = FunctionCall.fromJson(Map<String, dynamic>.from(value));
-      final args = <String, dynamic>{};
-      for (final MapEntry<String, dynamic> entry in call.args.entries) {
+      final call = FunctionCall.fromJson(Map<String, Object?>.from(value));
+      final args = <String, Object?>{};
+      for (final MapEntry<String, Object?> entry in call.args.entries) {
         args[entry.key] = resolveSync(entry.value);
       }
       final Object? result = _invoke(call.call, args, this);
@@ -59,7 +59,7 @@ class DataContext {
       return result;
     }
     if (value is Map) {
-      final result = <String, dynamic>{};
+      final result = <String, Object?>{};
       for (final MapEntry<Object?, Object?> entry in value.entries) {
         result[entry.key as String] = resolveSync(entry.value);
       }
@@ -71,17 +71,17 @@ class DataContext {
     return value;
   }
 
-  /// Returns a reactive signal that re-evaluates a dynamic value
+  /// Returns a reactive signal that re-evaluates a Object? value
   /// whenever its underlying data dependencies change.
   ReadonlySignal<Object?> resolveListenable(Object? value) {
     if (value is Map && value.containsKey('path')) {
       return dataModel.watch(resolvePath(value['path'] as String));
     }
     if (value is Map && value.containsKey('call')) {
-      final call = FunctionCall.fromJson(Map<String, dynamic>.from(value));
+      final call = FunctionCall.fromJson(Map<String, Object?>.from(value));
       return computed(() {
-        final args = <String, dynamic>{};
-        for (final MapEntry<String, dynamic> entry in call.args.entries) {
+        final args = <String, Object?>{};
+        for (final MapEntry<String, Object?> entry in call.args.entries) {
           final ReadonlySignal<Object?> resolved = resolveListenable(
             entry.value,
           );
@@ -120,7 +120,7 @@ class ComponentContext {
       );
 
   /// Dispatches an action from the component.
-  Future<void> dispatchAction(Map<String, dynamic> action) {
+  Future<void> dispatchAction(Map<String, Object?> action) {
     return surface.dispatchAction(action, componentModel.id);
   }
 
@@ -140,7 +140,7 @@ class ComponentContext {
 
 extension CatalogInvokerExtension on Catalog {
   /// Invokes a catalog function by name with the given arguments.
-  Object? invoke(String name, Map<String, dynamic> args, DataContext context) {
+  Object? invoke(String name, Map<String, Object?> args, DataContext context) {
     final FunctionImplementation? fn = functions[name];
     if (fn == null) {
       throw ArgumentError('Function not found: $name');

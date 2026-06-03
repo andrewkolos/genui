@@ -10,7 +10,7 @@ abstract class A2uiMessage {
   A2uiMessage({this.version = 'v0.9'});
 
   /// Deserializes a JSON envelope into a typed [A2uiMessage].
-  factory A2uiMessage.fromJson(Map<String, dynamic> json) {
+  factory A2uiMessage.fromJson(Map<String, Object?> json) {
     final Object? rawVersion = json['version'];
     if (rawVersion is! String) {
       throw A2uiValidationError(
@@ -44,27 +44,27 @@ abstract class A2uiMessage {
     }
 
     if (json.containsKey('createSurface')) {
-      final body = json['createSurface'] as Map<String, dynamic>;
+      final body = json['createSurface'] as Map<String, Object?>;
       return CreateSurfaceMessage(
         version: version,
         surfaceId: body['surfaceId'] as String,
         catalogId: body['catalogId'] as String,
-        theme: body['theme'] as Map<String, dynamic>?,
+        theme: body['theme'] as Map<String, Object?>?,
         sendDataModel: body['sendDataModel'] as bool? ?? false,
       );
     }
 
     if (json.containsKey('updateComponents')) {
-      final body = json['updateComponents'] as Map<String, dynamic>;
+      final body = json['updateComponents'] as Map<String, Object?>;
       return UpdateComponentsMessage(
         version: version,
         surfaceId: body['surfaceId'] as String,
-        components: (body['components'] as List).cast<Map<String, dynamic>>(),
+        components: (body['components'] as List).cast<Map<String, Object?>>(),
       );
     }
 
     if (json.containsKey('updateDataModel')) {
-      final body = json['updateDataModel'] as Map<String, dynamic>;
+      final body = json['updateDataModel'] as Map<String, Object?>;
       return UpdateDataModelMessage(
         version: version,
         surfaceId: body['surfaceId'] as String,
@@ -74,7 +74,7 @@ abstract class A2uiMessage {
     }
 
     if (json.containsKey('deleteSurface')) {
-      final body = json['deleteSurface'] as Map<String, dynamic>;
+      final body = json['deleteSurface'] as Map<String, Object?>;
       return DeleteSurfaceMessage(
         version: version,
         surfaceId: body['surfaceId'] as String,
@@ -88,14 +88,14 @@ abstract class A2uiMessage {
     );
   }
 
-  Map<String, dynamic> toJson();
+  Map<String, Object?> toJson();
 }
 
 /// Signals the client to create a new surface.
 class CreateSurfaceMessage extends A2uiMessage {
   final String surfaceId;
   final String catalogId;
-  final Map<String, dynamic>? theme;
+  final Map<String, Object?>? theme;
   final bool sendDataModel;
 
   CreateSurfaceMessage({
@@ -107,7 +107,7 @@ class CreateSurfaceMessage extends A2uiMessage {
   });
 
   @override
-  Map<String, dynamic> toJson() => {
+  Map<String, Object?> toJson() => {
     'version': version,
     'createSurface': {
       'surfaceId': surfaceId,
@@ -121,7 +121,7 @@ class CreateSurfaceMessage extends A2uiMessage {
 /// Updates a surface with a new set of components.
 class UpdateComponentsMessage extends A2uiMessage {
   final String surfaceId;
-  final List<Map<String, dynamic>> components;
+  final List<Map<String, Object?>> components;
 
   UpdateComponentsMessage({
     super.version,
@@ -130,7 +130,7 @@ class UpdateComponentsMessage extends A2uiMessage {
   });
 
   @override
-  Map<String, dynamic> toJson() => {
+  Map<String, Object?> toJson() => {
     'version': version,
     'updateComponents': {'surfaceId': surfaceId, 'components': components},
   };
@@ -150,7 +150,7 @@ class UpdateDataModelMessage extends A2uiMessage {
   });
 
   @override
-  Map<String, dynamic> toJson() => {
+  Map<String, Object?> toJson() => {
     'version': version,
     'updateDataModel': {
       'surfaceId': surfaceId,
@@ -167,7 +167,7 @@ class DeleteSurfaceMessage extends A2uiMessage {
   DeleteSurfaceMessage({super.version, required this.surfaceId});
 
   @override
-  Map<String, dynamic> toJson() => {
+  Map<String, Object?> toJson() => {
     'version': version,
     'deleteSurface': {'surfaceId': surfaceId},
   };
@@ -179,7 +179,7 @@ class A2uiClientAction {
   final String surfaceId;
   final String sourceComponentId;
   final DateTime timestamp;
-  final Map<String, dynamic> context;
+  final Map<String, Object?> context;
 
   A2uiClientAction({
     required this.name,
@@ -189,7 +189,7 @@ class A2uiClientAction {
     required this.context,
   });
 
-  Map<String, dynamic> toJson() => {
+  Map<String, Object?> toJson() => {
     'name': name,
     'surfaceId': surfaceId,
     'sourceComponentId': sourceComponentId,
@@ -212,7 +212,7 @@ class A2uiClientError {
     this.details,
   });
 
-  Map<String, dynamic> toJson() => {
+  Map<String, Object?> toJson() => {
     'code': code,
     'surfaceId': surfaceId,
     'message': message,
